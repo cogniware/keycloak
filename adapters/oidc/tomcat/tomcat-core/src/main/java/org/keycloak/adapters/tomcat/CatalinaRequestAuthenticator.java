@@ -96,6 +96,25 @@ public class CatalinaRequestAuthenticator extends RequestAuthenticator {
         request.setUserPrincipal(generalPrincipal);
         request.setAuthType(method);
         request.setAttribute(KeycloakSecurityContext.class.getName(), securityContext);
+        OidcKeycloakAccount account = new OidcKeycloakAccount() {
+
+          @Override
+          public Principal getPrincipal() {
+              return generalPrincipal;
+          }
+
+          @Override
+          public Set<String> getRoles() {
+              return roles;
+          }
+
+          @Override
+          public KeycloakSecurityContext getKeycloakSecurityContext() {
+              return securityContext;
+          }
+
+        };
+        this.tokenStore.saveAccountInfo(account);
     }
 
     @Override
